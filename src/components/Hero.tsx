@@ -1,0 +1,248 @@
+"use client"
+
+import Image from "next/image"
+import { Github, Linkedin, Mail, Phone, Instagram, Music, Copy, UserPlus } from "lucide-react"
+import { motion } from "framer-motion"
+import Me from "@/assets/me.png"
+
+const CodePattern = () => (
+  <svg className="absolute inset-0 w-full h-full opacity-5" xmlns="http://www.w3.org/2000/svg">
+    <pattern
+      id="pattern-circles"
+      x="0"
+      y="0"
+      width="50"
+      height="50"
+      patternUnits="userSpaceOnUse"
+      patternContentUnits="userSpaceOnUse"
+    >
+      <circle id="pattern-circle" cx="10" cy="10" r="1.6257413380501518" fill="#000"></circle>
+    </pattern>
+    <rect id="rect" x="0" y="0" width="100%" height="100%" fill="url(#pattern-circles)"></rect>
+  </svg>
+)
+
+export default function Hero() {
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      alert("Copied to clipboard!")
+    })
+  }
+
+  const saveContact = () => {
+    const contact = {
+      name: "Guilherme Faccin",
+      phone: "+5549999215720",
+      email: "gfaccin27@gmail.com",
+    }
+    const vcard = `BEGIN:VCARD
+VERSION:3.0
+FN:${contact.name}
+TEL:${contact.phone}
+EMAIL:${contact.email}
+END:VCARD`
+    const blob = new Blob([vcard], { type: "text/vcard;charset=utf-8" })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = "contact.vcf"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
+  return (
+    <section
+      id="hero"
+      className="min-h-screen relative overflow-hidden bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-indigo-900 dark:to-purple-900"
+    >
+      <div className="absolute inset-0 z-0">
+        <CodePattern />
+      </div>
+
+      <div className="absolute inset-0 z-0 opacity-30">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 animate-gradient-x"></div>
+      </div>
+
+      <div className="container mx-auto px-6 pt-32 pb-20 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+          <motion.div
+            className="lg:w-1/2 text-center lg:text-left"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+              Guilherme Faccin
+            </h1>
+            <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-gray-700 dark:text-gray-300">
+              Full-Stack Developer
+            </h2>
+            <motion.div
+              className="lg:hidden mb-8"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <motion.div
+                className="relative w-64 h-64 mx-auto"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 dark:from-blue-600 dark:to-purple-600 rounded-3xl"
+                  initial={{ rotate: 6, opacity: 0.5 }}
+                  whileHover={{ rotate: 0, opacity: 0.7 }}
+                  transition={{ duration: 0.3 }}
+                ></motion.div>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-purple-400 to-blue-400 dark:from-purple-600 dark:to-blue-600 rounded-3xl"
+                  initial={{ rotate: -6, opacity: 0.5 }}
+                  whileHover={{ rotate: 0, opacity: 0.7 }}
+                  transition={{ duration: 0.3 }}
+                ></motion.div>
+                <motion.div
+                  className="relative rounded-2xl overflow-hidden shadow-2xl w-full h-full"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Image
+                    src={Me || "/placeholder.svg"}
+                    alt="Guilherme Faccin"
+                    width={256}
+                    height={256}
+                    className="object-cover w-full h-full"
+                    priority
+                  />
+                </motion.div>
+              </motion.div>
+            </motion.div>
+            <div className="flex flex-col space-y-3 mb-8">
+              <div className="flex flex-col sm:flex-row space-y-3 sm:space-x-4">
+                <motion.button
+                  onClick={() => copyToClipboard("+5549999215720")}
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Copy className="w-6 h-6" />
+                  <span className="font-bold">PIX</span>
+                </motion.button>
+                <motion.button
+                  onClick={saveContact}
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <UserPlus className="w-6 h-6" />
+                  <span className="font-bold">Salvar</span>
+                </motion.button>
+              </div>
+              <a
+                href="https://github.com/Faccin27"
+                target="_blank"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl"
+                rel="noreferrer"
+              >
+                <Github className="w-6 h-6" />
+                <span className="font-bold">GitHub</span>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/guilherme-faccin"
+                target="_blank"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl"
+                rel="noreferrer"
+              >
+                <Linkedin className="w-6 h-6" />
+                <span className="font-bold">LinkedIn</span>
+              </a>
+              <a
+                href="mailto:gfaccin27@gmail.com"
+                target="_blank"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl"
+                rel="noreferrer"
+              >
+                <Mail className="w-6 h-6" />
+                <span className="font-bold">Email</span>
+              </a>
+              <a
+                href="tel:+5549999215720"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl"
+              >
+                <Phone className="w-6 h-6" />
+                <span className="font-bold">Phone</span>
+              </a>
+              <a
+                href="https://www.instagram.com/gui.faccin/"
+                target="_blank"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl"
+                rel="noreferrer"
+              >
+                <Instagram className="w-6 h-6" />
+                <span className="font-bold">Instagram</span>
+              </a>
+              <a
+                href="https://open.spotify.com/user/gfaccin27"
+                target="_blank"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl"
+                rel="noreferrer"
+              >
+                <Music className="w-6 h-6" />
+                <span className="font-bold">Spotify</span>
+              </a>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="lg:w-1/2 hidden lg:block"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <motion.div
+              className="relative w-72 h-72 md:w-96 md:h-96 mx-auto"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
+            >
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 dark:from-blue-600 dark:to-purple-600 rounded-3xl"
+                initial={{ rotate: 6, opacity: 0.5 }}
+                whileHover={{ rotate: 0, opacity: 0.7 }}
+                transition={{ duration: 0.3 }}
+              ></motion.div>
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-purple-400 to-blue-400 dark:from-purple-600 dark:to-blue-600 rounded-3xl"
+                initial={{ rotate: -6, opacity: 0.5 }}
+                whileHover={{ rotate: 0, opacity: 0.7 }}
+                transition={{ duration: 0.3 }}
+              ></motion.div>
+              <motion.div
+                className="relative rounded-2xl overflow-hidden shadow-2xl w-full h-full"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Image
+                  src={Me || "/placeholder.svg"}
+                  alt="Guilherme Faccin"
+                  width={384}
+                  height={384}
+                  className="object-cover w-full h-full"
+                  priority
+                />
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+      <motion.div
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8, duration: 0.6 }}
+      >
+        <div className="w-1 h-12 bg-gradient-to-b from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 rounded-full animate-pulse"></div>
+      </motion.div>
+    </section>
+  )
+}
+
