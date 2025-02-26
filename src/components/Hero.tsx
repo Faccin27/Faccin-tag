@@ -15,7 +15,6 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import Me from "@/assets/me.png";
 import { QrCodePix } from "qrcode-pix";
-import { code } from "framer-motion/client";
 
 const CodePattern = () => (
   <svg
@@ -50,7 +49,6 @@ const CodePattern = () => (
   </svg>
 );
 
-const transactionId = `TX${Date.now()}`;
 
 export default function Hero() {
   const [isOpen, setIsOpen] = useState(false);
