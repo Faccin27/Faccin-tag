@@ -1,12 +1,27 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import { Github, Linkedin, Mail, Phone, Instagram, Music, Copy, UserPlus } from "lucide-react"
-import { motion } from "framer-motion"
-import Me from "@/assets/me.png"
+import Image from "next/image";
+import {
+  Github,
+  Linkedin,
+  Mail,
+  Phone,
+  Instagram,
+  Music,
+  Copy,
+  UserPlus,
+} from "lucide-react";
+import { motion } from "framer-motion";
+import { useState } from "react";
+import Me from "@/assets/me.png";
+import { QrCodePix } from "qrcode-pix";
+import { code } from "framer-motion/client";
 
 const CodePattern = () => (
-  <svg className="absolute inset-0 w-full h-full opacity-5" xmlns="http://www.w3.org/2000/svg">
+  <svg
+    className="absolute inset-0 w-full h-full opacity-5"
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <pattern
       id="pattern-circles"
       x="0"
@@ -16,40 +31,86 @@ const CodePattern = () => (
       patternUnits="userSpaceOnUse"
       patternContentUnits="userSpaceOnUse"
     >
-      <circle id="pattern-circle" cx="10" cy="10" r="1.6257413380501518" fill="#000"></circle>
+      <circle
+        id="pattern-circle"
+        cx="10"
+        cy="10"
+        r="1.6257413380501518"
+        fill="#000"
+      ></circle>
     </pattern>
-    <rect id="rect" x="0" y="0" width="100%" height="100%" fill="url(#pattern-circles)"></rect>
+    <rect
+      id="rect"
+      x="0"
+      y="0"
+      width="100%"
+      height="100%"
+      fill="url(#pattern-circles)"
+    ></rect>
   </svg>
-)
+);
+
+const transactionId = `TX${Date.now()}`;
 
 export default function Hero() {
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      alert("Copied to clipboard!")
-    })
-  }
+  const [isOpen, setIsOpen] = useState(false);
+  const [amount, setAmount] = useState(0);
+  const [qrCode, setQrCode] = useState("");
+  const [copypasteCode, setCopypasteCode] = useState("");
+
+  const generateQRCode = async () => {
+    if (amount <= 0) return;
+    try {
+      const qrCodePix = QrCodePix({
+        version: "01",
+        key: "+5549999215720",
+        name: "Guilherme Faccin",
+        city: "SAO PAULO",
+        transactionId: "123456789",
+        message: "Pay me :)",
+        cep: "89610000",
+        value: amount,
+      });
+
+      const base64 = await qrCodePix.base64();
+      setQrCode(base64);
+
+      const copypaste = qrCodePix.payload();
+      setCopypasteCode(copypaste);
+    } catch (error) {
+      console.error("Erro ao gerar QR Code:", error);
+    }
+  };
+
+  const copyCopypasteCode = () => {
+    if (copypasteCode) {
+      navigator.clipboard.writeText(copypasteCode).then(() => {
+        alert("Código PIX copiado para a área de transferência!");
+      });
+    }
+  };
 
   const saveContact = () => {
     const contact = {
       name: "Guilherme Faccin",
       phone: "+5549999215720",
       email: "gfaccin27@gmail.com",
-    }
+    };
     const vcard = `BEGIN:VCARD
 VERSION:3.0
 FN:${contact.name}
 TEL:${contact.phone}
 EMAIL:${contact.email}
-END:VCARD`
-    const blob = new Blob([vcard], { type: "text/vcard;charset=utf-8" })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement("a")
-    link.href = url
-    link.download = "contact.vcf"
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
+END:VCARD`;
+    const blob = new Blob([vcard], { type: "text/vcard;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "contact.vcf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <section
@@ -120,7 +181,7 @@ END:VCARD`
             <div className="flex flex-col space-y-3 mb-8">
               <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                 <motion.button
-                  onClick={() => copyToClipboard("+5549999215720")}
+                  onClick={() => setIsOpen(true)}
                   className="w-full sm:w-1/2 inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -128,6 +189,7 @@ END:VCARD`
                   <Copy className="w-6 h-6" />
                   <span className="font-bold">PIX</span>
                 </motion.button>
+
                 <motion.button
                   onClick={saveContact}
                   className="w-full sm:w-1/2 inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
@@ -242,7 +304,89 @@ END:VCARD`
       >
         <div className="w-1 h-12 bg-gradient-to-b from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 rounded-full animate-pulse"></div>
       </motion.div>
-    </section>
-  )
-}
+      {isOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <motion.div
+            className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full shadow-2xl"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+          >
+            <div className="mb-4">
+              <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 text-center">
+                Pagamento PIX
+              </h3>
+            </div>
 
+            <div className="flex flex-col gap-4">
+              <input
+                type="number"
+                min="0.01"
+                step="0.01"
+                value={amount}
+                onChange={(e) => setAmount(parseFloat(e.target.value))}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+
+              <button
+                onClick={() => {
+                  generateQRCode();
+                }}
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Confirmar
+              </button>
+            </div>
+
+            {qrCode && (
+              <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                <motion.div
+                  className="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full shadow-2xl"
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
+                >
+                  <div className="mb-4 text-center">
+                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200">
+                      QR Code Gerado
+                    </h3>
+                  </div>
+
+                  <div className="flex flex-col items-center">
+                    <img
+                      src={qrCode}
+                      alt="QR Code PIX"
+                      className="mt-2 w-40 h-40"
+                    />
+                  </div>
+
+                  <button
+                    onClick={copyCopypasteCode}
+                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  >
+                    Codigo copia e cola
+                  </button>
+
+                  <div className="mt-6 flex justify-center">
+                    <button className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                      Fechar
+                    </button>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+
+            <div className="mt-6 flex justify-center">
+              <button
+                onClick={() => setIsOpen(false)}
+                className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+              >
+                Fechar
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </section>
+  );
+}
