@@ -210,7 +210,7 @@ END:VCARD`;
                 <span className="font-bold">Website</span>
               </a>
               <a
-                href="tel:+5549999215720"
+                href="https://api.whatsapp.com/send/?phone=49999215720&text&type=phone_number&app_absent=0"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl"
               >
                 <FaWhatsapp className="w-6 h-6" />
