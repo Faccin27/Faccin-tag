@@ -1,14 +1,29 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import { Github, Linkedin, Mail, Phone, Instagram, Music, Copy, UserPlus } from "lucide-react"
-import { motion } from "framer-motion"
-import { useState } from "react"
-import Me from "@/assets/me.png"
-import { QrCodePix } from "qrcode-pix"
+import Image from "next/image";
+
+import {
+  FaSpotify,
+  FaLinkedin,
+  FaWhatsapp,
+  FaGithub,
+  FaEnvelope,
+  FaUserPlus,
+  FaCopy,
+  FaGlobe,
+  FaInstagram,
+} from "react-icons/fa";
+import { FaPix } from "react-icons/fa6";
+import { motion } from "framer-motion";
+import { useState } from "react";
+import Me from "@/assets/me.png";
+import { QrCodePix } from "qrcode-pix";
 
 const CodePattern = () => (
-  <svg className="absolute inset-0 w-full h-full opacity-5" xmlns="http://www.w3.org/2000/svg">
+  <svg
+    className="absolute inset-0 w-full h-full opacity-5"
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <pattern
       id="pattern-circles"
       x="0"
@@ -18,20 +33,33 @@ const CodePattern = () => (
       patternUnits="userSpaceOnUse"
       patternContentUnits="userSpaceOnUse"
     >
-      <circle id="pattern-circle" cx="10" cy="10" r="1.6257413380501518" fill="#000"></circle>
+      <circle
+        id="pattern-circle"
+        cx="10"
+        cy="10"
+        r="1.6257413380501518"
+        fill="#000"
+      ></circle>
     </pattern>
-    <rect id="rect" x="0" y="0" width="100%" height="100%" fill="url(#pattern-circles)"></rect>
+    <rect
+      id="rect"
+      x="0"
+      y="0"
+      width="100%"
+      height="100%"
+      fill="url(#pattern-circles)"
+    ></rect>
   </svg>
-)
+);
 
 export default function Hero() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [amount, setAmount] = useState(0)
-  const [qrCode, setQrCode] = useState("")
-  const [copypasteCode, setCopypasteCode] = useState("")
+  const [isOpen, setIsOpen] = useState(false);
+  const [amount, setAmount] = useState(0);
+  const [qrCode, setQrCode] = useState("");
+  const [copypasteCode, setCopypasteCode] = useState("");
 
   const generateQRCode = async () => {
-    if (amount <= 0) return
+    if (amount <= 0) return;
     try {
       const qrCodePix = QrCodePix({
         version: "01",
@@ -42,47 +70,47 @@ export default function Hero() {
         message: "Pay me :)",
         cep: "89610000",
         value: amount,
-      })
+      });
 
-      const base64 = await qrCodePix.base64()
-      setQrCode(base64)
+      const base64 = await qrCodePix.base64();
+      setQrCode(base64);
 
-      const copypaste = qrCodePix.payload()
-      setCopypasteCode(copypaste)
+      const copypaste = qrCodePix.payload();
+      setCopypasteCode(copypaste);
     } catch (error) {
-      console.error("Erro ao gerar QR Code:", error)
+      console.error("Erro ao gerar QR Code:", error);
     }
-  }
+  };
 
   const copyCopypasteCode = () => {
     if (copypasteCode) {
       navigator.clipboard.writeText(copypasteCode).then(() => {
-        alert("Código PIX copiado para a área de transferência!")
-      })
+        alert("Código PIX copiado para a área de transferência!");
+      });
     }
-  }
+  };
 
   const saveContact = () => {
     const contact = {
       name: "Guilherme Faccin",
       phone: "+5549999215720",
       email: "gfaccin27@gmail.com",
-    }
+    };
     const vcard = `BEGIN:VCARD
 VERSION:3.0
 FN:${contact.name}
 TEL:${contact.phone}
 EMAIL:${contact.email}
-END:VCARD`
-    const blob = new Blob([vcard], { type: "text/vcard;charset=utf-8" })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement("a")
-    link.href = url
-    link.download = "contact.vcf"
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
+END:VCARD`;
+    const blob = new Blob([vcard], { type: "text/vcard;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "contact.vcf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <section
@@ -158,7 +186,7 @@ END:VCARD`
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Copy className="w-6 h-6" />
+                  <FaPix  className="w-6 h-6" />
                   <span className="font-bold">PIX</span>
                 </motion.button>
 
@@ -168,17 +196,42 @@ END:VCARD`
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <UserPlus className="w-6 h-6" />
+                  <FaUserPlus className="w-6 h-6" />
                   <span className="font-bold">Salvar</span>
                 </motion.button>
               </div>
+              <a
+                href="https://faccindev.pro"
+                target="_blank"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl"
+                rel="noreferrer"
+              >
+                <FaGlobe className="w-6 h-6" />
+                <span className="font-bold">Website</span>
+              </a>
+              <a
+                href="tel:+5549999215720"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl"
+              >
+                <FaWhatsapp className="w-6 h-6" />
+                <span className="font-bold">Whatsapp</span>
+              </a>
+              <a
+                href="https://www.instagram.com/gui.faccin/"
+                target="_blank"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl"
+                rel="noreferrer"
+              >
+                <FaInstagram className="w-6 h-6" />
+                <span className="font-bold">Instagram</span>
+              </a>
               <a
                 href="https://github.com/Faccin27"
                 target="_blank"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl"
                 rel="noreferrer"
               >
-                <Github className="w-6 h-6" />
+                <FaGithub className="w-6 h-6" />
                 <span className="font-bold">GitHub</span>
               </a>
               <a
@@ -187,7 +240,7 @@ END:VCARD`
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl"
                 rel="noreferrer"
               >
-                <Linkedin className="w-6 h-6" />
+                <FaLinkedin className="w-6 h-6" />
                 <span className="font-bold">LinkedIn</span>
               </a>
               <a
@@ -196,32 +249,17 @@ END:VCARD`
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl"
                 rel="noreferrer"
               >
-                <Mail className="w-6 h-6" />
+                <FaEnvelope className="w-6 h-6" />
                 <span className="font-bold">Email</span>
               </a>
-              <a
-                href="tel:+5549999215720"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl"
-              >
-                <Phone className="w-6 h-6" />
-                <span className="font-bold">Phone</span>
-              </a>
-              <a
-                href="https://www.instagram.com/gui.faccin/"
-                target="_blank"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl"
-                rel="noreferrer"
-              >
-                <Instagram className="w-6 h-6" />
-                <span className="font-bold">Instagram</span>
-              </a>
+
               <a
                 href="https://open.spotify.com/user/gfaccin27"
                 target="_blank"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl"
                 rel="noreferrer"
               >
-                <Music className="w-6 h-6" />
+                <FaSpotify className="w-6 h-6" />
                 <span className="font-bold">Spotify</span>
               </a>
             </div>
@@ -297,16 +335,19 @@ END:VCARD`
                 <div className="h-1 w-20 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mx-auto mt-2"></div>
               </div>
 
-
               <div className="flex flex-col gap-5">
                 <div className="relative">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">Valor (R$)</label>
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">
+                    Valor (R$)
+                  </label>
                   <input
                     type="number"
                     min="0.01"
                     step="0.01"
                     value={amount}
-                    onChange={(e) => setAmount(Number.parseFloat(e.target.value) || 0)}
+                    onChange={(e) =>
+                      setAmount(Number.parseFloat(e.target.value) || 0)
+                    }
                     className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800/80 dark:text-white transition-all duration-200"
                     placeholder="Digite o valor"
                   />
@@ -359,23 +400,29 @@ END:VCARD`
               </div>
 
               <div className="flex flex-col items-center">
-                
                 <div className="bg-white p-3 rounded-xl shadow-lg mb-6">
-                  <img src={qrCode || "/placeholder.svg"} alt="QR Code PIX" className="w-48 h-48" />
+                  <img
+                    src={qrCode || "/placeholder.svg"}
+                    alt="QR Code PIX"
+                    className="w-48 h-48"
+                  />
                 </div>
-                
+
                 <div className="flex justify-center mb-4">
-                <div className="bg-gradient-to-r from-blue-600/10 to-purple-600/10 dark:from-blue-600/20 dark:to-purple-600/20 px-6 py-3 rounded-xl">
-                  <p className="text-center text-gray-700 dark:text-gray-300">
-                    <span className="block text-sm font-medium">Valor a pagar:</span>
-                    <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
-                      R$ {amount.toFixed(2)}
-                    </span>
-                  </p>
+                  <div className="bg-gradient-to-r from-blue-600/10 to-purple-600/10 dark:from-blue-600/20 dark:to-purple-600/20 px-6 py-3 rounded-xl">
+                    <p className="text-center text-gray-700 dark:text-gray-300">
+                      <span className="block text-sm font-medium">
+                        Valor a pagar:
+                      </span>
+                      <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+                        R$ {amount.toFixed(2)}
+                      </span>
+                    </p>
+                  </div>
                 </div>
-              </div>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 text-center">
-                  Escaneie o código acima ou use a opção abaixo para copiar o código
+                  Escaneie o código acima ou use a opção abaixo para copiar o
+                  código
                 </p>
 
                 <motion.button
@@ -384,7 +431,7 @@ END:VCARD`
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <Copy className="w-5 h-5" />
+                  <FaCopy  className="w-5 h-5" />
                   <span className="font-bold">Copiar código PIX</span>
                 </motion.button>
               </div>
@@ -392,8 +439,8 @@ END:VCARD`
               <div className="mt-6 flex justify-center">
                 <motion.button
                   onClick={() => {
-                    setQrCode("")
-                    setIsOpen(false)
+                    setQrCode("");
+                    setIsOpen(false);
                   }}
                   className="px-6 py-2.5 text-gray-700 dark:text-gray-300 bg-white/80 dark:bg-gray-800/80 rounded-xl hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 shadow-md hover:shadow-lg border border-gray-200 dark:border-gray-700"
                   whileHover={{ scale: 1.05 }}
@@ -407,6 +454,5 @@ END:VCARD`
         </div>
       )}
     </section>
-  )
+  );
 }
-
